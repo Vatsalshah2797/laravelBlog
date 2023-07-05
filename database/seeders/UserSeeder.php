@@ -17,82 +17,38 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        //User Create
-        // $adminUser = User::insert([
-        //     [
-        //         'name' => 'Admin',
-        //         'email' => 'admin@admin.com',
-        //         'password' => bcrypt('admin')
-        //     ],
-        //     [
-        //         'name' => 'User',
-        //         'email' => 'user@gmail.com',
-        //         'password' => bcrypt('user')
-        //     ],
-        //     [
-        //         'name' => 'Vatsal Shah',
-        //         'email' => 'vatsalshah2797@gmail.com',
-        //         'password' => bcrypt('vatsal')
-        //     ]
-        // ]);
-
-        $adminUser = User::create([
-            'name' => 'Admin',
+        //admin role user creation
+        $adminuser = User::create([
+            'name' => 'Vatsal Shah',
             'email' => 'admin@admin.com',
             'password' => bcrypt('admin')
         ]);
+    
+        $adminrole = Role::create(['name' => 'Admin']);
+     
+        $adminpermissions = Permission::pluck('id', 'id')->all();
+   
+        $adminrole->syncPermissions($adminpermissions);
+     
+        $adminuser->assignRole([$adminrole->id]);
 
-
-        $user =  User::create([
+        //user role user creation
+        $user = User::create([
             'name' => 'User',
             'email' => 'user@user.com',
             'password' => bcrypt('user')
         ]);
-
-        //Role create
-        $adminRole = Role::create(['name' => 'admin']);
-        $userRole = Role::create(['name' => 'user']);
-
-        //Give Permission
-        $adminPermissions = [
-            'user-list',
-            'user-create',
-            //'user-edit',
-            'user-delete',
-            // 'role-list',
-            // 'role-create',
-            // 'role-edit',
-            // 'role-delete',
-            'post-list',
+    
+        $role = Role::create(['name' => 'User']);
+     
+        $permissions = Permission::whereIn('name', ['post-list',
             'post-create',
-            'post-edit',
-            'post-delete'
-         ];
-      
-        foreach ($adminPermissions as $permission) {
-              Permission::create(['name' => $permission]);
-              $adminRole->givePermissionTo($permission);
-        }
-
-        $userPermissions = [
-            // 'role-list',
-            // 'role-create',
-            // 'role-edit',
-            // 'role-delete',
-            'post-list',
-            'post-create',
+            'post-show',
             'post-edit'
-         ];
-      
-        foreach ($userPermissions as $permission) {
-              Permission::create(['name' => $permission]);
-              $userRole->givePermissionTo($permission);
-        }
-
-        // $permission = Permission::create(['name' => 'create users']);
-        // $adminRole->givePermissionTo($permission);
-
-        $adminUser->assignRole($adminRole);
-        $user->assignRole($userRole);
+        ])->pluck('id', 'id')->all();
+   
+        $role->syncPermissions($permissions);
+     
+        $user->assignRole([$role->id]);
     }
 }

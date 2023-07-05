@@ -6,8 +6,19 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+
 class PostController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('permission:post-list|post-create|post-edit|post-delete', ['only' => ['index','show']]);
+        $this->middleware('permission:post-create', ['only' => ['create','store']]);
+        $this->middleware('permission:post-show', ['only' => ['show']]);
+        $this->middleware('permission:post-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:post-delete', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,9 +26,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::latest()->paginate(5);
-    
-        return view('posts.index',compact('posts'))
+        $user = Auth::user();
+        if ($user->hasRole('Admin')) {
+            $posts = Post::select('id', 'title', 'image', 'author_name', 'author_description')->latest()->paginate(5);
+        } else {
+            $posts = Post::where('user_id', $user->id)->latest()->paginate(5);
+        }
+        return view('posts.index', compact('posts'))
             ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 

@@ -19,7 +19,7 @@
                     </p>
                 </a>
             </li>
-
+            @if (Auth::user()->hasRole('Admin'))
             <li class="nav-item">
                 <a href="{{ route('users.index') }}" class="nav-link">
                     <i class="nav-icon fas fa-users"></i>
@@ -28,6 +28,7 @@
                     </p>
                 </a>
             </li>
+            @endif
 
             <li class="nav-item">
                 <a href="{{ route('posts.index') }}" class="nav-link">

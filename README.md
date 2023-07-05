@@ -9,6 +9,54 @@
 
 ## About Laravel
 
+Laravel 9 Blog Management Web Application
+
+Steps to be followed
+===============================
+- Clone project code zip file from Repository
+- Run command `Composer install`
+- Run command `npm install`
+- Run command `cp env.example .env`
+- Run command `php artisan generate:key`
+- Create mysql db and Set database credentials in .env file
+- Add VITE_API_URL=http://localhost:8000/ in .env file
+- Run command `php artisan migrate --seed`
+- Run command `php artisan serve`
+- Run command `npm run dev`
+
+Credentials for Admin Role
+============================
+email = admin@admin.com,
+password = admin
+
+
+Credentials for User Role
+===========================
+email = user@user.com,
+password = user
+
+
+Used Tech Stack:: php, laravel 9 
+
+API::
+
+Note::
+============
+My laravel blog application is role based blog post creation web application.... 
+
+
+php artisan serve
+
+=============================
+
+Laravel Settings
+======================
+
+- Create one db in mysql and Set db connection in .env file
+- run migration using php artisan migrate command with seeding
+- run php artisan serve
+
+
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
 - [Simple, fast routing engine](https://laravel.com/docs/routing).
